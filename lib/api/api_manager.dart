@@ -32,7 +32,7 @@ class ApiManager {
   static Future<NewsResponse> getNewsSources(
     String sourceId, {
     int page = 1,
-    int pageSize = 20, // ممكن تزوديها لحد 100 حسب الـ API
+    int pageSize = 20,
   }) async {
     Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.newsApi, {
       'apiKey': ApiConstants.apiKey,

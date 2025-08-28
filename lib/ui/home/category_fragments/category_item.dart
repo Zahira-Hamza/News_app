@@ -117,12 +117,12 @@ class CategoryItem extends StatelessWidget {
                     // Use Flexible instead of Expanded
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 4.0), // Reduce padding
+                          horizontal: 12.0), // Reduce padding
                       child: Text(
                         "View All".tr(),
                         style:
                             Theme.of(context).textTheme.displayLarge?.copyWith(
-                                  fontSize: 14, // Reduce font size if needed
+                                  fontSize: 18, // Reduce font size if needed
                                 ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,

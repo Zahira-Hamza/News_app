@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/category_widget.dart';
+import '../../../providers/app_theme_provider.dart';
 import 'category_item.dart';
 
 typedef OnCategorySelected = void Function(CategoryWidget category);
@@ -16,8 +18,12 @@ class CategoryFragment extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    // ناخد isDark من ThemeProvider نفسه
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    bool isDark = themeProvider.isDark;
 
-    categoryList = CategoryWidget.getCategoryList(true);
+    // ونمرر القيمة الصح
+    categoryList = CategoryWidget.getCategoryList(isDark);
 
     return Padding(
       padding:
