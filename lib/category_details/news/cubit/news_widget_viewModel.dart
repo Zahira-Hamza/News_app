@@ -1,32 +1,23 @@
-// import 'package:flutter_bloc/flutter_bloc.dart';
-//
-// import '../../../api/api_manager.dart';
-// import 'news_widget_state.dart';
-//
-// class NewsWidgetViewmodel extends Cubit<NewsWidgetStates> {
-//   NewsWidgetViewmodel() : super(NewsLoadingState());
-//
-//   void getNews(String sourceId) async {
-//     try {
-//       var response = await ApiManager.getNewsSources(sourceId);
-//       if (response.status == 'error') {
-//         emit(NewsErrorState(errorMessage: response.message!));
-//       } else {
-//         emit(NewsSuccessState(newsList: response.articles!));
-//       }
-//     } catch (e) {
-//       emit(NewsErrorState(errorMessage: e.toString()));
-//     }
-//   }
-// }
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/data/repository/news/data_sources/remote/news_remote_dataSource.dart';
+import 'package:news_app/data/repository/news/repository/news_repository.dart';
 
 import '../../../api/api_manager.dart';
+import '../../../data/repository/news/data_sources/remote/impl/news_remote_dataSource_impl.dart';
+import '../../../data/repository/news/repository/impl/news_repository_impl.dart';
 import 'news_widget_state.dart';
 
 class NewsWidgetViewmodel extends Cubit<NewsWidgetState> {
-  NewsWidgetViewmodel() : super(NewsWidgetState.initial());
+  late NewsRepository newsRepository;
+  late NewsRemoteDatasource remote;
+  late ApiManager apiManager;
+
+  NewsWidgetViewmodel() : super(NewsWidgetState.initial()) {
+    apiManager = ApiManager();
+    remote = NewsRemoteDatasourceImpl(apiManager: apiManager);
+    newsRepository = NewsRepositoryImpl(remoteDatasource: remote);
+  }
 
   Future<void> getNews(String sourceId,
       {int page = 1, int pageSize = 20}) async {
@@ -35,11 +26,15 @@ class NewsWidgetViewmodel extends Cubit<NewsWidgetState> {
     emit(state.copyWith(isLoading: true, error: null));
 
     try {
-      final resp = await ApiManager.getNewsSources(
+      final resp = await newsRepository.getNews(
         sourceId,
         page: page,
         pageSize: pageSize,
       );
+
+      if (resp == null) {
+        throw Exception('Failed to fetch news: null response');
+      }
 
       if (resp.status != 'ok') {
         throw Exception(resp.message ?? 'Unknown error'.tr());

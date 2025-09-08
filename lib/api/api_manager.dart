@@ -8,7 +8,7 @@ import 'api_constants.dart';
 import 'end_points.dart';
 
 class ApiManager {
-  static Future<SourceResponse> getSources(String categoryId) async {
+  Future<SourceResponse> getSources(String categoryId) async {
     Uri url = Uri.https(ApiConstants.baseUrl, EndPoints.sourcesApi, {
       'apiKey': ApiConstants.apiKey,
       'category': categoryId,
@@ -29,7 +29,7 @@ class ApiManager {
   }
 
   //  أضفت page و pageSize
-  static Future<NewsResponse> getNewsSources(
+  Future<NewsResponse> getNewsSources(
     String sourceId, {
     int page = 1,
     int pageSize = 20,
